@@ -8,8 +8,6 @@ import styles from "../styles/Home.module.css";
 
 //additional packages
 import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 export default function Home(greeting: string) {
   const [logs, setLogs] = React.useState("Connect your wallet and greet!");
@@ -74,6 +72,8 @@ export default function Home(greeting: string) {
       }),
     });
 
+    window.alert(greeting);
+
     if (response.status === 500) {
       const errorMessage = await response.text();
 
@@ -87,11 +87,7 @@ export default function Home(greeting: string) {
     greeting: string;
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => greet(data.greeting);
 

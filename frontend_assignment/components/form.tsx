@@ -1,19 +1,20 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import styles from "../styles/Home.module.css";
 
-interface IFormInputs {
+type FormData = {
   name: string;
   age: number;
   address: string;
-}
+};
 
 const schema = yup
-  .object({
-    firstName: yup.string().required(),
+  .object()
+  .shape({
+    name: yup.string().required(),
     age: yup.number().positive().integer().required(),
     address: yup.string().required(),
   })
@@ -24,10 +25,15 @@ export default function App() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInputs>({
+    reset,
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data: IFormInputs) => console.log(data);
+
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log("data = ", { data });
+    reset();
+  };
 
   return (
     <div className={styles.container}>
@@ -41,7 +47,7 @@ export default function App() {
           <p>{errors.age?.message}</p>
           address
           <input {...register("address")} />
-          <p>{errors.age?.message}</p>
+          <p>{errors.address?.message}</p>
           <input type="submit" value="submit" />
         </form>
       </main>
